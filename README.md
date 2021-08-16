@@ -4,8 +4,8 @@ Noise Analysis Program for The EUNIL group to investigate noise, characterize ac
 # Introduction
 This is a user manual for the noise analysis program created in matlab for the EUNIL lab. It contains the instructions
 for getting started as well as in depth information about how the program actually works. This program is designed to read
-in M-Mode data(fast time samples at regular intervals). Currently, it can import data from the labs National Intruments acquisition 
-setup, or also the Photosound acquisition system. 
+in M-Mode data(fast time samples at regular intervals). Currently, it can import data from the lab's National Intruments acquisition 
+setup as well as the Photosound acquisition system. 
 
 
 # Overview
