@@ -15,9 +15,9 @@ This capability is especially meant for processing multiple input files at a tim
 for example, all the MMode images would be saved to the file "MMODE_filename.pptx". 
 # Getting Started
 ## Running the program
-This program requires you to have matlab installed on your computer so you can open the file with matlab and run it. 
+This program requires you to have matlab installed on your computer so you can open the script with matlab and run it. 
 
-Once you have opened the file in matlab, you can change parameters or skip this step if you will use the defaults.
+Once you have opened the script in matlab, you can change parameters or skip this step if you will use the defaults.
 ![image](https://user-images.githubusercontent.com/45602872/112206200-e36e9400-8bd2-11eb-9c45-4e2651120625.png)
 
 Next, you can run the program
