@@ -29,6 +29,25 @@ Choose a file
     You should select the base name for the power point files you want to save to. In the future, this may just be a folder. 
     
 After the user input selections, the program will run and plot/save charts. 
+## Important Variables to set
+There are several variables that require manual entry. These can all be found at the beginning of the script under "General Parameters" "Filter Parameters", "Analysis, Plotting, and Saving Parameters", "Display Range Parameters", "NI Parameters", "Photosound Parameters", and "Scaling and Gain Parameters". 
+
+
+| Variable | Parameter Category | Description | Allowed types+Range | Notes |
+| -------- | ------------------ | ----------- | ------------------- | ----- |
+| scanPt | General | Number of scan points | Integer > 0 | The program can only do single point scans at the moment |
+| addpath | Filepath | Adds file path locations for additional scripts used and default filepaths | String, File path | This is not a variable, but still somethign the user will want to change. |
+| fastTimeFiltCut | Filter | Fast time filter cuttoffs for bandpas filter in MHz | float > 0 | Cuttoffs are in a 4 element vector [cuttoff region low, passband low, oassband high, cuttoff region high] |
+| slowTimeFiltCut | Filter | Slow time filter cuttoffs for bandpas filter in MHz | float > 0 | Cuttoffs are in a 4 element vector [cuttoff region low, passband low, oassband high, cuttoff region high] |
+| numPreAvg | Analysis, Plotting, and Saving | Number of Averages | Integer > 0 | This is just the number of averages for the scan you are analyzing |
+| defaultROI | Analysis, Plotting, and Saving | Select the region to analyze and graph | float >0 | ROI in terms of [fastTimeStart(us), fastTimeEnd(us), slowTimeStart(ms), slowTimeEnd(ms)] |
+| niGain | NI | Gain of the NI system | Integer > 0 | Note: gain is in terms of scaling factor, not decibels. This usually never changes for NI |
+| psGain | Photosound | Gain of Photosound | Integer > 0 | Note: gain is in terms of scaling factor, not decibels. The photosound describes gain as decibels and so this will need to be converted |
+|  |  |  |  |  |
+
+These variables are the ones the user will likely need to set. There are additional variables/parameters which can be set. The script contains short descriptions of these variables in the different parameter sections. 
+ 
+### 
 # Interpreting graphs
 Perhaps the most relevant information is how to actually interpret the graphs and understand how the graphs are made. 
 ## Chart Overview
