@@ -93,6 +93,7 @@ end
 %% Main Loop
 while true
     %% Ask User for Input
+    %Get Plooting preferences
     if ~strcmpi(input("Use Defaults? (y/n):  ",'s'),"y")
         savePlots=strcmpi(input("Save Plots? (y/n):  ",'s'),"y");
         spectrumAnalysis=strcmpi(input("Perform Spectrum Analysis? (y/n):  ",'s'),"y");
@@ -108,6 +109,10 @@ while true
         psChannels=input("Use Channel: ");
         numChannels=numPreAvg;
     end 
+    
+    %Get scan point preferences. 
+    xpoint=input("X point(enter number):  ");
+    ypoint=input("Y point(enter number):  ");
     
     %% Read in, Process, Plot, and Save Data
         if ps
@@ -168,7 +173,7 @@ while true
                 end
                 
             else
-                [rawData,scanParam]=readNI([path currentFile]);
+                [rawData,scanParam]=readNI([path currentFile],xpoint,ypoint);
             end 
         end
         
@@ -813,7 +818,7 @@ end
         end
         
         %%%% Read National Instruments Data
-        function [rawData,scanParam]=readNI(filename)
+        function [rawData,scanParam]=readNI(filename,xpoint,ypoint)
             %%%Read in Data from NI
             %Get scan parameters
             scanInfo=matfile(filename).bScanParm;
@@ -833,11 +838,19 @@ end
 
 
             %Get hf Data
+            
+            %Calculate the point in the scan to capture
             scanParam.scanSize=scanInfo.Scan.Xpt*scanInfo.Scan.Ypt;
+            scanParam.Xpt = linspace(-scanInfo.Scan.XDist/2,scanInfo.Scan.XDist/2,scanInfo.Scan.Xpt);
+            scanParam.Ypt = linspace(-scanInfo.Scan.YDist/2,scanInfo.Scan.YDist/2,scanInfo.Scan.Ypt);
+            [scrapVal idxX]=min(abs(scanParam.Xpt-xpoint));
+            [scrapVal idxY]=min(abs(scanParam.Ypt-ypoint));
+            scanParam.scanIdx=(idxY-1)*(size(scanParam.Xpt,2))+idxX;
+            
             scanParam.numChannels=str2num(scanInfo.Daq.HF.Channels(end))-str2num(scanInfo.Daq.HF.Channels(1))+1;
             hfDataTemp=Read_Data([filename],1);%Read in Hf data for particular point (Fast, Slow, Channel)
             rawData=zeros([size(hfDataTemp)]);% scanSize was included as a last dimension
-            rawData(:,:,:)=Read_Data(filename,scanInfo.Scan.Xpt);%   TODO: Charles change... It should be scan point...
+            rawData(:,:,:)=Read_Data(filename,scanParam.scanIdx);%   TODO: Charles change... It should be scan point...
 
         end
         

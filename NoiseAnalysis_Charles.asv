@@ -93,6 +93,7 @@ end
 %% Main Loop
 while true
     %% Ask User for Input
+    %Get Plooting preferences
     if ~strcmpi(input("Use Defaults? (y/n):  ",'s'),"y")
         savePlots=strcmpi(input("Save Plots? (y/n):  ",'s'),"y");
         spectrumAnalysis=strcmpi(input("Perform Spectrum Analysis? (y/n):  ",'s'),"y");
@@ -108,6 +109,10 @@ while true
         psChannels=input("Use Channel: ");
         numChannels=numPreAvg;
     end 
+    
+    %Get scan point preferences. 
+    show2DFFT=input("Show 2DFFT? (y/n):  ",'s')),"y");
+     
     
     %% Read in, Process, Plot, and Save Data
         if ps
@@ -168,7 +173,7 @@ while true
                 end
                 
             else
-                [rawData,scanParam]=readNI([path currentFile],x,y);
+                [rawData,scanParam]=readNI([path currentFile],xpoint,ypoint);
             end 
         end
         
@@ -813,14 +818,14 @@ end
         end
         
         %%%% Read National Instruments Data
-        function [rawData,scanParam]=readNI(filename,x,y)
+        function [rawData,scanParam]=readNI(filename,xpoint,ypoint)
             %%%Read in Data from NI
             %Get scan parameters
             scanInfo=matfile(filename).bScanParm;
             
             scanParam.fsFastTime=scanInfo.Daq.HF.Rate_mhz;%Fast Time Sampling Frequency
             scanParam.numSamplesFastTime=round(scanInfo.Daq.HF.Samples);% Number of Fast time samples
-            scanParam.fsSlowTime=scanInfo.Daq.HF.PulseRate; %input("Slow Time Sampling Rate(Hz)? ");%Slow Time Sampling Frequency  TODO: CHARLES CHANGE to an automatic input
+            scanParam.fsSlowTime=scanInfo.Daq.HF.PulseRate;%input("Slow Time Sampling Rate(Hz)? ");%Slow Time Sampling Frequency  TODO: CHARLES CHANGE to an automatic input
             display("Charles Fix This!");
             scanParam.numSamplesSlowTime=scanInfo.Scan.Tpt;% Number of Slow Time Samples
 
@@ -833,7 +838,15 @@ end
 
 
             %Get hf Data
+            
+            %Calculate the point in the scan to capture
             scanParam.scanSize=scanInfo.Scan.Xpt*scanInfo.Scan.Ypt;
+            scanParam.Xpt = linspace(-scanInfo.Scan.XDist/2,scanInfo.Scan.XDist/2,scanInfo.Scan.Xpt);
+            scanParam.Ypt = linspace(-scanInfo.Scan.YDist/2,scanInfo.Scan.YDist/2,scanInfo.Scan.Ypt);
+            [~ idxX]=min(abs(scanParam.Xpt-xpoint));
+            [~ idxY]=min(abs(scanParam.Ypt-ypoint));
+            
+            
             scanParam.numChannels=str2num(scanInfo.Daq.HF.Channels(end))-str2num(scanInfo.Daq.HF.Channels(1))+1;
             hfDataTemp=Read_Data([filename],1);%Read in Hf data for particular point (Fast, Slow, Channel)
             rawData=zeros([size(hfDataTemp)]);% scanSize was included as a last dimension
