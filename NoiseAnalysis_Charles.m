@@ -74,7 +74,7 @@ niGain=440;
 
 
 %%% Photosound Parameters(SET THESE)
-ps=true;               %Flag if Using Photosound;
+ps=false;               %Flag if Using Photosound;
 psQuantization=1/(0.427*10^-6);   %Scaling factor from photosound quanta to Volts. this is in Units/Volt 
 psGain=446;              %Gain of Photosound
 
